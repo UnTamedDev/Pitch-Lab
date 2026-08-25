@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#070a12">
+  <title>Foil Foundry × Luminant Labs — Investor Pitch for Matthew</title>
+  <style>
+    :root {
+      --night: #070a12;
+      --ink: #f4f7ff;
+      --muted: #a5aec1;
+      --line: rgba(255,255,255,.11);
+      --panel: rgba(14,18,30,.82);
+      --panel2: rgba(20,27,44,.68);
+      --cyan: #6ce5ff;
+      --violet: #ab8cff;
+      --pink: #ff7cce;
+      --lime: #8ff0bb;
+      --gold: #ffd779;
+      --danger: #ff8795;
+      --shadow: 0 30px 90px rgba(0,0,0,.44);
+    }
+    * { box-sizing: border-box; }
+    html { color-scheme: dark; background: var(--night); }
+    body {
+      margin: 0; min-height: 100vh; color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(900px 620px at 16% -8%, rgba(62,205,255,.12), transparent 67%),
+        radial-gradient(760px 600px at 95% 8%, rgba(171,140,255,.15), transparent 65%),
+        linear-gradient(145deg, #070a12 0%, #090d18 52%, #060911 100%);
+      overflow-x: hidden;
+    }
+    body::before {
+      content: ""; position: fixed; inset: 0; pointer-events: none; opacity: .32;
+      background-image: linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+      background-size: 44px 44px; mask-image: linear-gradient(to bottom, #000, transparent 88%);
+    }
+    button, a { font: inherit; }
+    button { color: inherit; }
+    .app { min-height: 100vh; display: grid; grid-template-columns: 286px minmax(0, 1fr); }
+    .rail {
+      position: sticky; top: 0; height: 100vh; padding: 28px 22px; border-right: 1px solid var(--line);
+      background: rgba(6,9,16,.78); backdrop-filter: blur(22px); z-index: 10; display: flex; flex-direction: column;
+    }
+    .brand { display: flex; align-items: center; gap: 13px; padding: 4px 6px 24px; }
+    .mark { width: 42px; aspect-ratio: 1; border-radius: 13px; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(108,229,255,.16); background: conic-gradient(from 220deg, var(--cyan), var(--violet), var(--pink), var(--gold), var(--cyan)); }
+    .mark::after { content:"FF"; position:absolute; inset:3px; border-radius:10px; display:grid; place-items:center; color:#edfaff; font-weight:900; letter-spacing:-.08em; background:#0a0f1a; }
+    .brand strong { display:block; letter-spacing:-.025em; }
+    .brand span { color: var(--muted); font-size: .75rem; }
+    .nav { display: grid; gap: 6px; }
+    .nav button {
+      width: 100%; min-height: 48px; display: grid; grid-template-columns: 26px 1fr auto; align-items:center; gap:10px;
+      text-align: left; border: 1px solid transparent; border-radius: 12px; padding: 10px 12px; background: transparent; cursor: pointer; color: #aeb7c9; transition: .2s ease;
+    }
+    .nav button:hover { color: #fff; background: rgba(255,255,255,.035); }
+    .nav button[aria-selected="true"] { color: #fff; border-color: rgba(108,229,255,.24); background: linear-gradient(90deg, rgba(108,229,255,.11), rgba(171,140,255,.055)); }
+    .nav .n { color: #5f6b80; font-size: .72rem; font-variant-numeric: tabular-nums; }
+    .nav button[aria-selected="true"] .n { color: var(--cyan); }
+    .nav .status { width: 6px; height: 6px; border-radius: 99px; background: transparent; }
+    .nav button[aria-selected="true"] .status { background: var(--cyan); box-shadow: 0 0 16px var(--cyan); }
+    .rail-bottom { margin-top: auto; padding: 18px 7px 4px; }
+    .progress { height: 3px; border-radius: 99px; background: #151b28; overflow: hidden; }
+    .progress span { display:block; height:100%; width:12.5%; border-radius:inherit; background: linear-gradient(90deg,var(--cyan),var(--violet),var(--pink)); transition: width .35s ease; }
+    .rail-bottom p { color: #6f7a8f; font-size: .69rem; line-height: 1.5; }
+
+    .stage { min-width: 0; padding: 26px; }
+    .slide {
+      display: none; min-height: calc(100vh - 52px); max-width: 1320px; margin: 0 auto; position: relative; overflow: hidden;
+      border: 1px solid var(--line); border-radius: 26px; background: linear-gradient(145deg, rgba(16,21,34,.94), rgba(9,13,23,.9)); box-shadow: var(--shadow);
+      padding: clamp(36px, 5vw, 76px); isolation: isolate;
+    }
+    .slide.active { display: flex; flex-direction: column; animation: enter .45s ease both; }
+    .slide::before { content:""; position:absolute; z-index:-2; width:560px; height:560px; border-radius:50%; filter:blur(95px); opacity:.14; background:var(--violet); right:-280px; top:-260px; }
+    .slide::after { content:""; position:absolute; z-index:-1; inset:0; pointer-events:none; opacity:.18; background: linear-gradient(118deg, transparent 0 32%, rgba(108,229,255,.07) 40%, transparent 48% 62%, rgba(255,124,206,.05) 70%, transparent 78%); }
+    @keyframes enter { from { opacity:0; transform:translateY(8px) } to { opacity:1; transform:none } }
+    .kicker { color: var(--cyan); font-size: .75rem; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { margin: 16px 0 20px; max-width: 980px; font-size: clamp(3rem, 6.6vw, 6.8rem); line-height: .91; letter-spacing: -.068em; }
+    h2 { margin: 12px 0 18px; max-width: 960px; font-size: clamp(2.1rem, 4.2vw, 4.5rem); line-height: 1; letter-spacing: -.055em; }
+    h3 { margin-bottom: 9px; font-size: 1.05rem; letter-spacing: -.018em; }
+    p { color: #c1c9d9; line-height: 1.62; }
+    .lede { max-width: 820px; color: #cdd6e7; font-size: clamp(1rem, 1.55vw, 1.26rem); }
+    .gradient-text { color: transparent; background: linear-gradient(92deg, #fff 0%, var(--cyan) 35%, var(--violet) 67%, var(--pink)); background-clip: text; -webkit-background-clip: text; }
+    .ghost-word { position:absolute; right:-.03em; bottom:-.17em; z-index:-1; color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,.045); font-size: min(27vw, 360px); font-weight:950; letter-spacing:-.09em; user-select:none; }
+    .hero-bottom { margin-top:auto; padding-top: 38px; display:grid; grid-template-columns: 1.3fr .7fr; gap:24px; align-items:end; }
+    .thesis { padding-left: 18px; border-left: 2px solid var(--cyan); color: #dce8f7; max-width: 730px; }
+    .micro { color: #7e899e; font-size: .76rem; line-height:1.5; }
+    .metric-row { display:grid; grid-template-columns: repeat(4, 1fr); gap:12px; margin-top:34px; }
+    .metric { padding: 18px 17px; min-height: 110px; border-top: 1px solid rgba(108,229,255,.38); background: linear-gradient(180deg, rgba(108,229,255,.055), transparent); }
+    .metric strong { display:block; margin-bottom:6px; color:#fff; font-size:clamp(1.45rem,2.3vw,2.3rem); letter-spacing:-.05em; }
+    .metric span { color:#8995aa; font-size:.76rem; line-height:1.35; }
+    .grid-2 { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: clamp(18px,3vw,38px); margin-top: 22px; }
+    .grid-3 { display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 18px; margin-top: 24px; }
+    .panel { padding: 22px; border:1px solid var(--line); border-radius:18px; background: var(--panel2); }
+    .panel.accent { background: linear-gradient(140deg, rgba(108,229,255,.095), rgba(171,140,255,.05)); border-color: rgba(108,229,255,.2); }
+    .panel p:last-child { margin-bottom:0; }
+    .eyeline { display:flex; align-items:center; gap:9px; margin-bottom:14px; color:#8995aa; font-size:.71rem; letter-spacing:.13em; text-transform:uppercase; }
+    .eyeline::before { content:""; width:18px; height:1px; background:var(--cyan); }
+    .number { color: var(--cyan); font-size:2.25rem; font-weight:850; letter-spacing:-.05em; }
+    .flow { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; margin-top:30px; border:1px solid var(--line); border-radius:18px; overflow:hidden; background:var(--line); }
+    .flow > div { min-height:150px; padding:22px; background:#0d1220; }
+    .flow b { color:var(--cyan); font-size:.72rem; letter-spacing:.14em; }
+    .flow strong { display:block; margin:13px 0 8px; font-size:1.03rem; }
+    .flow p { color:#8f9aaf; font-size:.78rem; margin:0; }
+    .table { margin-top:22px; border-top:1px solid var(--line); }
+    .tr { display:grid; grid-template-columns: 1.3fr repeat(3, .72fr); gap:18px; align-items:center; min-height:54px; border-bottom:1px solid var(--line); }
+    .tr.head { min-height:42px; color:#788399; font-size:.69rem; letter-spacing:.12em; text-transform:uppercase; }
+    .tr > :not(:first-child) { text-align:right; font-variant-numeric: tabular-nums; }
+    .good { color:var(--lime); }
+    .gold { color:var(--gold); }
+    .bad { color:var(--danger); }
+    .bar-set { margin-top: 28px; display:grid; gap:18px; }
+    .bar { display:grid; grid-template-columns:150px 1fr 90px; gap:16px; align-items:center; }
+    .bar label { color:#b8c1d2; font-size:.81rem; }
+    .track { height:10px; border-radius:99px; overflow:hidden; background:#151c2b; }
+    .fill { height:100%; border-radius:inherit; background:linear-gradient(90deg,var(--cyan),var(--violet)); box-shadow:0 0 18px rgba(108,229,255,.22); }
+    .bar output { color:#fff; text-align:right; font-size:.8rem; }
+    .quote { max-width:900px; padding:26px 0 10px; font-size:clamp(1.45rem,2.6vw,2.6rem); line-height:1.24; letter-spacing:-.035em; color:#eef5ff; }
+    .timeline { margin-top:34px; display:grid; grid-template-columns:repeat(3,1fr); position:relative; }
+    .timeline::before { content:""; position:absolute; top:12px; left:7%; right:7%; height:1px; background:linear-gradient(90deg,var(--cyan),var(--violet),var(--pink)); opacity:.6; }
+    .phase { position:relative; padding:35px 26px 10px 0; }
+    .phase::before { content:""; position:absolute; top:7px; left:0; width:11px; height:11px; border-radius:99px; background:#07101a; border:2px solid var(--cyan); box-shadow:0 0 18px rgba(108,229,255,.5); }
+    .phase:nth-child(2)::before { border-color:var(--violet); }
+    .phase:nth-child(3)::before { border-color:var(--pink); }
+    .phase b { color:#6f7b91; font-size:.7rem; letter-spacing:.14em; text-transform:uppercase; }
+    .phase h3 { margin-top:9px; }
+    .phase ul, .clean { margin:10px 0 0; padding-left:1.05rem; color:#aab4c6; font-size:.82rem; line-height:1.55; }
+    .phase li, .clean li { margin:6px 0; }
+    .ecosystem { display:grid; grid-template-columns: .9fr 1.25fr .9fr; gap:18px; align-items:stretch; margin-top:24px; }
+    .system-core { display:flex; flex-direction:column; justify-content:center; min-height:330px; border-radius:26px; padding:30px; background:radial-gradient(circle at 35% 20%,rgba(108,229,255,.16),transparent 48%),linear-gradient(145deg,#151a2b,#0b101d); border:1px solid rgba(108,229,255,.24); box-shadow: inset 0 1px rgba(255,255,255,.05), 0 24px 55px rgba(0,0,0,.25); }
+    .system-core .ring { width:68px; height:68px; border:1px solid rgba(108,229,255,.5); border-radius:22px; display:grid; place-items:center; margin-bottom:30px; box-shadow:inset 0 0 30px rgba(108,229,255,.1); color:var(--cyan); font-weight:900; }
+    .stack { display:grid; gap:14px; }
+    .module { min-height:150px; padding:21px; border:1px solid var(--line); border-radius:17px; background:rgba(11,15,25,.72); }
+    .module strong { display:block; margin:10px 0 7px; }
+    .module p { font-size:.79rem; margin:0; color:#8f9aaf; }
+    .price-ladder { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:28px; align-items:end; }
+    .price { padding:24px 20px; min-height:220px; border:1px solid var(--line); border-radius:18px; background:#0c111d; }
+    .price.hero { min-height:250px; border-color:rgba(108,229,255,.35); background:linear-gradient(145deg,rgba(108,229,255,.11),rgba(171,140,255,.07)); box-shadow:0 20px 55px rgba(0,0,0,.26); }
+    .price .tier { color:#7f8ba0; font-size:.7rem; letter-spacing:.14em; text-transform:uppercase; }
+    .price .amount { margin:14px 0 16px; font-size:2.6rem; font-weight:900; letter-spacing:-.06em; }
+    .price .amount small { font-size:.75rem; color:#7f8ba0; font-weight:500; letter-spacing:0; }
+    .price ul { margin:0; padding-left:1rem; color:#aab4c6; font-size:.78rem; line-height:1.55; }
+    .round-ask { display:grid; grid-template-columns:.8fr 1.2fr; gap:40px; align-items:center; margin-top:28px; }
+    .big-ask { position:relative; min-height:340px; border-radius:50%; aspect-ratio:1; max-width:390px; display:grid; place-items:center; text-align:center; background:radial-gradient(circle at 32% 24%,rgba(255,255,255,.14),transparent 25%), conic-gradient(from 210deg,rgba(108,229,255,.26),rgba(171,140,255,.23),rgba(255,124,206,.19),rgba(255,215,121,.14),rgba(108,229,255,.26)); border:1px solid rgba(255,255,255,.18); box-shadow:inset 0 0 70px rgba(255,255,255,.03),0 30px 70px rgba(0,0,0,.35); }
+    .big-ask::after { content:""; position:absolute; inset:10%; border-radius:50%; background:#0c111d; border:1px solid rgba(255,255,255,.08); }
+    .big-ask div { z-index:1; }
+    .big-ask strong { display:block; font-size:clamp(3.2rem,6vw,5.6rem); letter-spacing:-.07em; }
+    .big-ask span { color:#9da8bc; font-size:.82rem; }
+    .allocation { display:grid; gap:12px; }
+    .allocation .row { display:grid; grid-template-columns:1fr auto; gap:12px; padding:12px 0; border-bottom:1px solid var(--line); }
+    .allocation .row span { color:#9ba6ba; font-size:.83rem; }
+    .allocation .row b { font-variant-numeric:tabular-nums; }
+    .term-sheet { display:grid; grid-template-columns:repeat(2,1fr); border:1px solid var(--line); border-radius:18px; overflow:hidden; margin-top:24px; }
+    .term { padding:19px 22px; border-right:1px solid var(--line); border-bottom:1px solid var(--line); min-height:105px; }
+    .term:nth-child(even) { border-right:0; }
+    .term:nth-last-child(-n+2) { border-bottom:0; }
+    .term b { display:block; color:#7f8aa0; font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+    .term strong { font-size:1.16rem; letter-spacing:-.025em; }
+    .decision { margin-top:auto; display:flex; justify-content:space-between; align-items:end; gap:30px; padding-top:30px; }
+    .decision .askline { max-width:760px; font-size:clamp(1.25rem,2.3vw,2.2rem); line-height:1.25; letter-spacing:-.035em; color:#eaf2ff; }
+    .pager { position:absolute; right:32px; bottom:26px; display:flex; gap:8px; }
+    .pager button { width:38px; height:38px; border-radius:50%; border:1px solid var(--line); background:rgba(11,15,25,.65); cursor:pointer; }
+    .pager button:hover { border-color:rgba(108,229,255,.35); background:rgba(108,229,255,.08); }
+    .sources { columns:2; column-gap:42px; margin-top:22px; }
+    .source { break-inside:avoid; padding:0 0 18px; margin-bottom:18px; border-bottom:1px solid var(--line); }
+    .source b { display:block; color:#e9f4ff; margin-bottom:4px; }
+    .source a { color:var(--cyan); text-decoration:none; font-size:.75rem; word-break:break-word; }
+    .source p { margin:7px 0 0; color:#8f9aaf; font-size:.77rem; }
+    .legal { margin-top:auto; padding-top:22px; color:#6f7a8e; font-size:.67rem; line-height:1.5; max-width:1100px; }
+    .mobile-top { display:none; }
+
+    @media (max-width: 980px) {
+      .app { grid-template-columns:1fr; }
+      .rail { position:sticky; height:auto; padding:12px 14px; border-right:0; border-bottom:1px solid var(--line); }
+      .brand, .rail-bottom { display:none; }
+      .nav { display:flex; overflow-x:auto; scrollbar-width:none; }
+      .nav button { min-width:max-content; grid-template-columns:18px auto; min-height:42px; padding:8px 11px; }
+      .nav .status { display:none; }
+      .stage { padding:12px; }
+      .slide { min-height:calc(100vh - 80px); padding:34px 24px 80px; border-radius:20px; }
+      .metric-row, .flow { grid-template-columns:1fr 1fr; }
+      .grid-3, .price-ladder, .timeline { grid-template-columns:1fr; }
+      .timeline::before { display:none; }
+      .ecosystem { grid-template-columns:1fr; }
+      .round-ask, .hero-bottom { grid-template-columns:1fr; }
+      .big-ask { max-width:300px; min-height:0; }
+      .sources { columns:1; }
+    }
+    @media (max-width: 620px) {
+      .grid-2, .metric-row, .flow, .term-sheet { grid-template-columns:1fr; }
+      .term { border-right:0; }
+      .term:nth-last-child(2) { border-bottom:1px solid var(--line); }
+      .tr { grid-template-columns:1fr repeat(3,.6fr); gap:8px; font-size:.75rem; }
+      .bar { grid-template-columns:100px 1fr 65px; gap:8px; }
+      .pager { right:18px; bottom:18px; }
+    }
+    @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation:none!important; transition:none!important; } }
+    @media print {
+      body { background:#fff; color:#111827; }
+      body::before,.rail,.pager { display:none!important; }
+      .app { display:block; }
+      .stage { padding:0; }
+      .slide,.slide.active { display:block!important; min-height:0; page-break-after:always; border:0; border-radius:0; box-shadow:none; background:#fff; color:#111827; padding:44px; }
+      .slide::before,.slide::after,.ghost-word { display:none; }
+      p,.lede,.micro,.panel p,.module p,.phase ul,.clean,.price ul,.source p,.legal { color:#4b5563; }
+      h1,h2,h3,.term strong,.askline { color:#111827!important; }
+      .panel,.module,.price,.term-sheet,.flow,.flow>div,.system-core { background:#f6f8fb; border-color:#d9dee8; box-shadow:none; }
+      .tr,.term,.source { border-color:#d9dee8; }
+      .gradient-text { color:#111827; background:none; }
+      a { color:#075c70!important; }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="rail" aria-label="Pitch deck navigation">
+    <div class="brand"><div class="mark" aria-hidden="true"></div><div><strong>Foil Foundry</strong><span>Investor briefing · Matthew</span></div></div>
+    <nav class="nav" role="tablist" aria-label="Deck sections">
+      <button role="tab" aria-selected="true" aria-controls="overview" data-tab="overview"><span class="n">01</span><span>The opportunity</span><span class="status"></span></button>
+      <button role="tab" aria-selected="false" aria-controls="business" data-tab="business"><span class="n">02</span><span>The business</span><span class="status"></span></button>
+      <button role="tab" aria-selected="false" aria-controls="economics" data-tab="economics"><span class="n">03</span><span>Unit economics</span><span class="status"></span></button>
+      <button role="tab" aria-selected="false" aria-controls="pilot" data-tab="pilot"><span class="n">04</span><span>90-day proof</span><span class="status"></span></button>
+      <button role="tab" aria-selected="false" aria-controls="platform" data-tab="platform"><span class="n">05</span><span>Technology</span><span class="status"></span></button>
+      <button role="tab" aria-selected="false" aria-controls="scale" data-tab="scale"><span class="n">06</span><span>Technology round</span><span class="status"></span></button>
+      <button role="tab" aria-selected="false" aria-controls="terms" data-tab="terms"><span class="n">07</span><span>Terms & decision</span><span class="status"></span></button>
+      <button role="tab" aria-selected="false" aria-controls="sources" data-tab="sources"><span class="n">08</span><span>Sources</span><span class="status"></span></button>
+    </nav>
+    <div class="rail-bottom"><div class="progress"><span></span></div><p>Use the tabs or ← → keys. Print mode expands the full deck.</p></div>
+  </aside>
+
+  <main class="stage">
+    <section class="slide active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
+      <div class="kicker">A staged investment in proof, not promises</div>
+      <h1>A collectibles business that <span class="gradient-text">learns.</span></h1>
+      <p class="lede">Foil Foundry combines disciplined card retail with an interactive original-creature experience and a software operating system built around the way show vendors actually buy, price, scan, and sell.</p>
+      <div class="metric-row">
+        <div class="metric"><strong>$3,000</strong><span>initial operating pilot</span></div>
+        <div class="metric"><strong>90 days</strong><span>to validate the core economics</span></div>
+        <div class="metric"><strong>4 screens</strong><span>across two Foil Forge units</span></div>
+        <div class="metric"><strong>$8,000</strong><span>conditional technology round after proof</span></div>
+      </div>
+      <div class="hero-bottom">
+        <p class="thesis">Matthew's first decision is intentionally small: fund the operating pilot, receive transparent monthly reporting, and reserve the right to evaluate a separate technology-growth round only after 4–6 months of real customer data.</p>
+        <p class="micro">Prepared for Matthew<br>Dan Schlagle · Foil Foundry × Luminant Labs<br>August 24, 2026 · Confidential discussion draft</p>
+      </div>
+      <div class="ghost-word">FF</div>
+      <div class="pager"><button data-prev aria-label="Previous">←</button><button data-next aria-label="Next">→</button></div>
+    </section>
+
+    <section class="slide" id="business" role="tabpanel" hidden>
+      <div class="kicker">One booth · multiple reasons to stop</div>
+      <h2>The experience creates traffic. The system captures value.</h2>
+      <div class="flow" aria-label="Foil Foundry operating model">
+        <div><b>01 · ATTRACT</b><strong>Cards people already want</strong><p>Liquid singles, slabs, selective sealed stock, and carefully structured curated packs.</p></div>
+        <div><b>02 · ENGAGE</b><strong>The Foil Forge</strong><p>Four concurrent design screens turn the booth into a participatory destination.</p></div>
+        <div><b>03 · ACQUIRE</b><strong>Binder-to-offer workflow</strong><p>Customers scan collections; configurable rules turn value data into a consistent offer.</p></div>
+        <div><b>04 · RETAIN</b><strong>Storefront + stream</strong><p>Inventory, content, customer relationships, and sponsor inventory continue after the show.</p></div>
+      </div>
+      <div class="grid-2">
+        <div class="panel accent"><div class="eyeline">Foil Foundry</div><h3>Immediate retail engine</h3><p>Cash-flow potential comes from buying below net realizable value, selling through live and online channels, and using the kiosk to increase dwell time and average booth engagement.</p></div>
+        <div class="panel"><div class="eyeline">Luminant Labs</div><h3>Measured personalization engine</h3><p>Custom coloring-book orders add a second digital-to-physical product, but ad spend scales only after tracking proves that contribution exceeds acquisition cost.</p></div>
+      </div>
+      <p class="legal">The Foil Forge is positioned as an original fantasy-creature product and does not use Pokémon names, characters, card frames, or trade dress. Mystery-pack revenue remains conditional on final disclosures, batch accounting, venue/platform rules, and legal review.</p>
+      <div class="pager"><button data-prev aria-label="Previous">←</button><button data-next aria-label="Next">→</button></div>
+    </section>
+
+    <section class="slide" id="economics" role="tabpanel" hidden>
+      <div class="kicker">The margin is made when inventory is purchased</div>
+      <h2>Buying discipline matters more than optimistic price tags.</h2>
+      <div class="table" aria-label="Inventory buying targets">
+        <div class="tr head"><span>Acquisition case</span><span>Buy</span><span>Sell</span><span>Margin before fees</span></div>
+        <div class="tr"><strong>Disciplined show buy</strong><span>60</span><span>105</span><span class="good">42.9%</span></div>
+        <div class="tr"><strong>Normal liquid buy</strong><span>70</span><span>105</span><span>33.3%</span></div>
+        <div class="tr"><strong>High-cost buy</strong><span>85</span><span>100</span><span class="bad">15.0%</span></div>
+      </div>
+      <div class="grid-2">
+        <div>
+          <div class="quote">“Market value” becomes useful only after fees, time-to-sale, condition risk, and liquidity are deducted.</div>
+          <p class="micro">Target buy bands: 65–72% for highly liquid inventory; 55–65% for normal stock; 50% or less for slow/speculative pieces. An 85% buy is an exception, not a policy.</p>
+        </div>
+        <div class="panel">
+          <div class="eyeline">Base one-day show</div>
+          <div class="bar-set">
+            <div class="bar"><label>Merchandise</label><div class="track"><div class="fill" style="width:75%"></div></div><output>$900 rev.</output></div>
+            <div class="bar"><label>Foil Forge</label><div class="track"><div class="fill" style="width:45%"></div></div><output>$540 rev.</output></div>
+            <div class="bar"><label>Curated packs*</label><div class="track"><div class="fill" style="width:33%"></div></div><output>$400 rev.</output></div>
+            <div class="bar"><label>Contribution</label><div class="track"><div class="fill" style="width:45%;background:linear-gradient(90deg,var(--lime),var(--cyan))"></div></div><output class="good">≈ $540</output></div>
+          </div>
+          <p class="micro" style="margin-top:22px">Base model: 120 paid prints across four screens, $4.50 blended revenue per print, $0.85 assumed direct print cost, and $350 for booth/helper/travel/supplies. *Conditional until cleared.</p>
+        </div>
+      </div>
+      <div class="pager"><button data-prev aria-label="Previous">←</button><button data-next aria-label="Next">→</button></div>
+    </section>
+
+    <section class="slide" id="pilot" role="tabpanel" hidden>
+      <div class="kicker">Milestone funding keeps the risk controlled</div>
+      <h2>Ninety days to determine what deserves scale.</h2>
+      <div class="timeline">
+        <div class="phase"><b>Days 0–30</b><h3>Build the measurement layer</h3><ul><li>Separate books and cost basis</li><li>First dual-screen kiosk live</li><li>Inventory fully scanned</li><li>Luminant purchase-value tracking live</li></ul></div>
+        <div class="phase"><b>Days 31–60</b><h3>Prove the live workflow</h3><ul><li>First event economics report</li><li>Median completion ≤120 seconds</li><li>Print/rework failure under 5%</li><li>Release second tranche only after review</li></ul></div>
+        <div class="phase"><b>Days 61–90</b><h3>Repeat—or revise</h3><ul><li>Two dual-screen units deployed</li><li>3–5 cumulative event-days</li><li>100+ cumulative paid prints</li><li>Inventory and CAC gates reviewed</li></ul></div>
+      </div>
+      <div class="grid-3">
+        <div class="panel"><div class="number">20%+</div><h3>Eligible inventory sell-through</h3><p>Or a documented pricing/liquidity correction before more inventory capital is deployed.</p></div>
+        <div class="panel"><div class="number">≤ $5</div><h3>Luminant paid CAC target</h3><p>Pause above $6.50; require 15–20 measured purchases before scaling.</p></div>
+        <div class="panel accent"><div class="number">1 page</div><h3>Monthly investor dashboard</h3><p>Cash, receipts, margins, inventory aging, kiosk throughput, CAC, and repayments.</p></div>
+      </div>
+      <div class="pager"><button data-prev aria-label="Previous">←</button><button data-next aria-label="Next">→</button></div>
+    </section>
+
+    <section class="slide" id="platform" role="tabpanel" hidden>
+      <div class="kicker">The retail operation becomes the product laboratory</div>
+      <h2>The software is built inside the problem it solves.</h2>
+      <div class="ecosystem">
+        <div class="stack">
+          <div class="module"><div class="eyeline">Acquire</div><strong>Internal scanner</strong><p>Rapid identification, comp evidence, condition review, purchase recommendations, and reject rules.</p></div>
+          <div class="module"><div class="eyeline">Customer</div><strong>Public binder scanner</strong><p>A customer-facing path from collection scan to valuation range and structured vendor offer.</p></div>
+        </div>
+        <div class="system-core"><div class="ring">CRM</div><h3>Foil Foundry operating system</h3><p>Inventory cost basis, alerts, offer percentages, volume and velocity signals, aging, show results, grading candidates, channel economics, and configurable vendor policies.</p><p class="micro">The wedge is not “another card scanner.” It is the link between customer acquisition, vendor controls, show-day workflow, and measurable purchasing discipline.</p></div>
+        <div class="stack">
+          <div class="module"><div class="eyeline">Operate</div><strong>Vendor dashboard</strong><p>Alerts, percentage controls, inventory health, event attribution, team access, and exportable reporting.</p></div>
+          <div class="module"><div class="eyeline">Expand</div><strong>Add-ons + consumables</strong><p>Scan volume, seats, listing integrations, white-label tools, card media, cases, dice, and partner peripherals.</p></div>
+        </div>
+      </div>
+      <div class="price-ladder">
+        <div class="price"><div class="tier">Core</div><div class="amount">$49<small>/mo</small></div><ul><li>Inventory + basic scanning</li><li>Entry scan allowance</li><li>Single operator</li></ul></div>
+        <div class="price hero"><div class="tier">Vendor Pro · anchor</div><div class="amount">$99<small>/mo</small></div><ul><li>Internal + public binder scanner</li><li>Configurable offer rules and alerts</li><li>Event and acquisition reporting</li><li>Priority onboarding</li></ul></div>
+        <div class="price"><div class="tier">Team / Studio</div><div class="amount">$149<small>/mo+</small></div><ul><li>Multiple seats and locations</li><li>Advanced integrations</li><li>Kiosk or white-label options</li></ul></div>
+      </div>
+      <p class="thesis" style="margin-top:24px">At the $99 anchor price: 25 active vendors represent $29,700 ARR; 50 represent $59,400 ARR; and 100 represent $118,800 ARR—before add-ons, onboarding, consumables, or partner revenue.</p>
+      <p class="legal">Competitive pricing establishes both opportunity and pressure: Card Dealer Pro currently lists plans from $9 to $59 per month, while TCGplayer previously published BinderPOS pricing at $100 and $150 monthly. The $99 tier must therefore prove distinctive workflow value and measurable time or purchasing savings.</p>
+      <div class="pager"><button data-prev aria-label="Previous">←</button><button data-next aria-label="Next">→</button></div>
+    </section>
+
+    <section class="slide" id="scale" role="tabpanel" hidden>
+      <div class="kicker">Conditional technology growth proposal · month 4–6 decision</div>
+      <h2>After proof, turn the internal advantage into a vendor product.</h2>
+      <div class="round-ask">
+        <div class="big-ask"><div><strong>$8K</strong><span>target round<br>$6K–$10K acceptable range</span></div></div>
+        <div>
+          <div class="eyeline">Use of funds</div>
+          <div class="allocation">
+            <div class="row"><span>Vendor/show advertising and demonstrations</span><b>$2,800</b></div>
+            <div class="row"><span>Social media, website, and content labor</span><b>$2,000</b></div>
+            <div class="row"><span>Branded backdrop, TV, mounts, cabling</span><b>$1,500</b></div>
+            <div class="row"><span>Demo, sponsor, and onboarding materials</span><b>$700</b></div>
+            <div class="row"><span>Software readiness, security, contingency</span><b>$1,000</b></div>
+          </div>
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="panel"><div class="number">10+</div><h3>Design partners</h3><p>Vendors using real inventory and acquisition workflows.</p></div>
+        <div class="panel"><div class="number">$1K+</div><h3>MRR before the round</h3><p>Or 10 $99-equivalent paying accounts with clean payment history.</p></div>
+        <div class="panel accent"><div class="number">85%+</div><h3>90-day account retention</h3><p>With gross margin ≥70% and support burden measured.</p></div>
+      </div>
+      <p class="legal">Sponsorship is upside, not base-case revenue. The TV/backdrop creates real sponsor inventory—screen loops, stream overlays, named segments, QR placements, and product integration—but cash sponsorship enters the forecast only after audience data or a signed commitment exists.</p>
+      <div class="pager"><button data-prev aria-label="Previous">←</button><button data-next aria-label="Next">→</button></div>
+    </section>
+
+    <section class="slide" id="terms" role="tabpanel" hidden>
+      <div class="kicker">A clean structure for Matthew</div>
+      <h2>Two decisions, separated by evidence.</h2>
+      <div class="grid-2">
+        <div class="panel">
+          <div class="eyeline">Decision one · now</div>
+          <h3>$3,000 operating pilot</h3>
+          <p>Two $1,500 tranches. Six percent of qualifying Foil Foundry and Luminant receipts beginning in month four, until a 1.25× cap is reached. Target: 18–24 months. No equity or claim on unrelated IP.</p>
+        </div>
+        <div class="panel accent">
+          <div class="eyeline">Decision two · after proof</div>
+          <h3>$8,000 technology round</h3>
+          <p>Separate instrument activated only after the 4–6 month proof gates. The technology round does not silently expand the first investment's scope.</p>
+        </div>
+      </div>
+      <div class="term-sheet" aria-label="Illustrative technology round terms">
+        <div class="term"><b>Preferred instrument</b><strong>Technology Revenue Participation Note</strong></div>
+        <div class="term"><b>Investor participation</b><strong>7.5% of Adjusted Technology Receipts</strong></div>
+        <div class="term"><b>Duration</b><strong>Up to 36 months</strong></div>
+        <div class="term"><b>Repayment cap</b><strong>1.50× · $12,000 on $8,000</strong></div>
+        <div class="term"><b>Defined receipts</b><strong>Subscriptions, add-ons, onboarding, consumables—less tax, refunds, chargebacks, payment fees</strong></div>
+        <div class="term"><b>Ownership</b><strong>No permanent equity; no ownership of pre-existing IP</strong></div>
+      </div>
+      <div class="grid-2" style="margin-top:18px">
+        <div><h3>Why revenue participation is preferred</h3><p class="micro">A 5–10% profit share sounds simple, but profit can disappear through legitimate reinvestment and accounting choices. Adjusted receipts are easier for both parties to verify. At 7.5%, reaching the $12,000 cap within 36 months requires roughly 47 average $99-equivalent active accounts, before add-ons.</p></div>
+        <div><h3>Profit-share alternative</h3><p class="micro">If Matthew prefers profit participation, an illustrative alternative is 10% of clearly defined Technology Operating Profit for 36 months. Because that structure may return less than principal, it requires explicit treatment of unrecovered capital at maturity and is not the recommended first draft.</p></div>
+      </div>
+      <div class="decision"><div class="askline">Approve the operating pilot now. Revisit the technology round only when retention, gross margin, customer savings, and acquisition economics are visible.</div><div class="micro">All terms are discussion concepts subject to New Jersey legal, tax, accounting, securities, and usury review.</div></div>
+      <div class="pager"><button data-prev aria-label="Previous">←</button><button data-next aria-label="Next">→</button></div>
+    </section>
+
+    <section class="slide" id="sources" role="tabpanel" hidden>
+      <div class="kicker">Research basis</div>
+      <h2>The assumptions are visible and replaceable.</h2>
+      <p class="lede">External data informs fee assumptions, pricing context, market activity, and risk controls. Internal projections remain scenarios until operating evidence replaces them.</p>
+      <div class="sources">
+        <div class="source"><b>Pokémon TCG: 30th Celebration</b><a href="https://tcg.pokemon.com/en-us/expansions/30th-celebration/">tcg.pokemon.com</a><p>Official September 16, 2026 release timing and anniversary context.</p></div>
+        <div class="source"><b>eBay Pokémon 30th-anniversary data</b><a href="https://www.ebayinc.com/stories/news/ebay-unveils-pok%C3%A9mon-day-auction-celebrating-30-years-of-iconic-collectibles/">ebayinc.com</a><p>Marketplace interest signals, including anniversary-related item and search activity.</p></div>
+        <div class="source"><b>eBay trading-card seller fees</b><a href="https://www.ebay.com/sellercenter/selling/start-selling-on-ebay/seller-fees">ebay.com/sellercenter</a><p>13.25% standard trading-card final value fee plus per-order fee.</p></div>
+        <div class="source"><b>TCGplayer seller fees</b><a href="https://help.tcgplayer.com/hc/en-us/articles/23315007565079-How-to-Understand-Commissions-and-Fees">help.tcgplayer.com</a><p>Marketplace commission and domestic transaction-fee assumptions.</p></div>
+        <div class="source"><b>Square payment fees</b><a href="https://squareup.com/help/us/en/article/5068-what-are-square-s-fees">squareup.com</a><p>Current common in-person processing benchmark.</p></div>
+        <div class="source"><b>Card Dealer Pro pricing</b><a href="https://www.carddealerpro.com/">carddealerpro.com</a><p>Current competitor plans from $9 to $59 monthly and included scan/listing functionality.</p></div>
+        <div class="source"><b>BinderPOS platform and published pricing context</b><a href="https://help.tcgplayer.com/hc/en-us/articles/23315007565079-How-to-Understand-Commissions-and-Fees">help.tcgplayer.com</a><p>TCG retail platform context and published $100 Basic / $150 Pro monthly pricing.</p></div>
+        <div class="source"><b>TCGplayer Scan & Identify</b><a href="https://help.tcgplayer.com/hc/en-us/articles/27303403772823-How-To-Use-Scan-Identify">help.tcgplayer.com</a><p>Evidence that live scanning is now a competitive baseline—not sufficient differentiation alone.</p></div>
+        <div class="source"><b>Federal Reserve H.15</b><a href="https://www.federalreserve.gov/releases/h15/">federalreserve.gov</a><p>Current prime-rate benchmark used when comparing a conventional note.</p></div>
+        <div class="source"><b>SBA lender rate limits</b><a href="https://www.sba.gov/sba-lenders/">sba.gov</a><p>Small-loan rate comparison context.</p></div>
+        <div class="source"><b>Investor.gov</b><a href="https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-alerts/updated-4">investor.gov</a><p>Warning against “guaranteed” high-return investment language.</p></div>
+        <div class="source"><b>Pokémon IP guidance</b><a href="https://support.pokemon.com/hc/en-us/articles/360000634094-Can-I-use-Pok%C3%A9mon-images-or-materials">support.pokemon.com</a><p>Official direction not to use or associate Pokémon IP with independent projects.</p></div>
+        <div class="source"><b>eBay chance-listing policy</b><a href="https://www.ebay.com/help/policies/prohibited-restricted-items/chance-listings-policy?id=4311">ebay.com/help</a><p>Restrictions affecting mystery boxes, chance-based claims, and trading-card repacks.</p></div>
+        <div class="source"><b>New Jersey sales tax</b><a href="https://www.nj.gov/treasury/taxation/businesses/salestax/index.shtml">nj.gov/treasury/taxation</a><p>6.625% general tax treatment for most tangible personal property.</p></div>
+      </div>
+      <p class="legal">This deck is a planning and negotiation document, not an offer of securities, legal advice, tax advice, or a guarantee. Subscription scenarios use the $99 Vendor Pro price and a modeled 70–75% gross-margin target; actual performance may differ materially.</p>
+      <div class="pager"><button data-prev aria-label="Previous">←</button><button data-next aria-label="Next">→</button></div>
+    </section>
+  </main>
+</div>
+
+<script>
+  (() => {
+    const ids = [...document.querySelectorAll('.nav button')].map(b => b.dataset.tab);
+    const buttons = [...document.querySelectorAll('.nav button')];
+    const slides = [...document.querySelectorAll('.slide')];
+    const progress = document.querySelector('.progress span');
+    let index = Math.max(0, ids.indexOf(location.hash.slice(1)));
+
+    function show(next, updateHash = true) {
+      index = (next + ids.length) % ids.length;
+      slides.forEach((s, i) => {
+        const active = i === index;
+        s.classList.toggle('active', active);
+        s.hidden = !active;
+      });
+      buttons.forEach((b, i) => {
+        b.setAttribute('aria-selected', i === index ? 'true' : 'false');
+        b.tabIndex = i === index ? 0 : -1;
+      });
+      progress.style.width = `${((index + 1) / ids.length) * 100}%`;
+      if (updateHash) history.replaceState(null, '', `#${ids[index]}`);
+      document.title = `Foil Foundry — ${buttons[index].querySelector('span:nth-child(2)').textContent}`;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    buttons.forEach((b, i) => b.addEventListener('click', () => show(i)));
+    document.querySelectorAll('[data-next]').forEach(b => b.addEventListener('click', () => show(index + 1)));
+    document.querySelectorAll('[data-prev]').forEach(b => b.addEventListener('click', () => show(index - 1)));
+    window.addEventListener('keydown', e => {
+      if (['ArrowRight','PageDown',' '].includes(e.key)) { e.preventDefault(); show(index + 1); }
+      if (['ArrowLeft','PageUp'].includes(e.key)) { e.preventDefault(); show(index - 1); }
+      if (e.key === 'Home') { e.preventDefault(); show(0); }
+      if (e.key === 'End') { e.preventDefault(); show(ids.length - 1); }
+    });
+    window.addEventListener('hashchange', () => {
+      const hashIndex = ids.indexOf(location.hash.slice(1));
+      if (hashIndex >= 0) show(hashIndex, false);
+    });
+    show(index, false);
+  })();
+</script>
+</body>
+</html>
